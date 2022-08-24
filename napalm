@@ -1,0 +1,13 @@
+from napalm import get_network_driver
+# napalm documentation https://napalm.readthedocs.io/en/latest/
+
+
+# Use the appropriate network driver to connect to the device, in this case Cisco IOS
+driver = get_network_driver("ios")
+# Connect using hostname, username, password: optional arguments are possible such as port numbers
+sw1 = driver("10.0.0.2", "jacob", "cisco")
+sw1.open()  # opening connection
+
+# applying napalm command to sw1 and then dumping the ouput into a variable
+sw1_output = sw1.get_facts()
+print(sw1_output)  # printing said variable

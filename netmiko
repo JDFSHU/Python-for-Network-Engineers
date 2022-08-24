@@ -1,5 +1,7 @@
 from distutils.command.config import config
 from netmiko import ConnectHandler
+# netmiko documentation https://github.com/ktbyers/netmiko/blob/develop/EXAMPLES.md
+
 
 # switch information stored in a dictionary to be called later
 iou_l2 = {
