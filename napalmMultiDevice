@@ -13,10 +13,10 @@ for ip_address in devices:  # for loop to iterate through list of devices
     # device, username, password for connection parameters
     connect = driver(ip_address, "jacob", "cisco")
     connect.open()  # open the connection
-    print("\nFetching Arp Tables")
+
     # apply napalm get_arp_table command to fetch arp tables
-    output = connect.get_arp_table()
-    # print out arp table in a human readable format
+    print("\nFetching Arp Tables")
+    output = connect.get_arp_table()  # print out arp table in a human readable format
     print(json.dumps(output, indent=4))
 
     print("\nFetching Interface IP's")
