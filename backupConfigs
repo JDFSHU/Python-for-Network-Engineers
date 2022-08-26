@@ -1,6 +1,7 @@
 from asyncore import read
 import telnetlib
 import getpass
+# telnetlib documentation https://docs.python.org/3/library/telnetlib.html
 
 user = input("Enter Username: ")
 password = getpass.getpass()
