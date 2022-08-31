@@ -3,6 +3,7 @@ from pprint import pprint
 from netmiko import ConnectHandler
 import json
 from time import time
+import threading
 
 
 def read_devices(device_filename):
@@ -24,8 +25,6 @@ def read_devices(device_filename):
                 "name": device_info[2]
             }
             devices[device["ipaddr"]] = device
-    print("\n Devices")
-    pprint(devices)
     return devices
 
 # function to open a file and decrypt it using a key
@@ -38,13 +37,7 @@ def read_device_creds(device_creds_filename, key):
         device_creds_json = decrypt(key, device_creds_file.read())
 
     device_creds_list = json.loads(device_creds_json.decode("utf-8"))
-    pprint(device_creds_list)
-
-    print("\n Device Credentials")
-
     device_creds = {dev[0]: dev for dev in device_creds_list}
-    pprint(device_creds)
-
     return device_creds
 
 # function to check for type of device and input show run/show config commands
@@ -59,8 +52,6 @@ def config_worker(device, creds):
         device_type = "cisco_xr"
     else:
         device_type = "cisco_ios"
-    print("Connecting to device {0}, username={1}, password={2}".format(
-        device["ipaddr"], creds[1], creds[2]))
 
     session = ConnectHandler(
         device_type=device_type, ip=device["ipaddr"], username=creds[1], password=creds[2])
@@ -89,7 +80,6 @@ def config_worker(device, creds):
         config_out.write(config_data)
 
     session.disconnect()
-
     return
 
 
@@ -99,11 +89,19 @@ creds = read_device_creds("encrypted_device_creds",
                           "cisco")  # filename, decryption key
 
 starting_time = time()  # using time to count how long program takes to run
-print("\nBeginning Config\n")
+
+config_threads_list = []
+
 for ipaddr, device in devices.items():
-    print(f"Getting configuration for: {device}")
-    config_worker(device, creds[ipaddr])
+    print('Creating thread for: ', device)
+    config_threads_list.append(threading.Thread(
+        target=config_worker, args=(device, creds[ipaddr])))
 
+for config_thread in config_threads_list:
+    config_thread.start()
 
+for config_thread in config_threads_list:
+    config_thread.join()
 # calculating time taken
-print(f"Configuration completed, elapsed time: {time()-starting_time}")
+print(
+    f"End of Configuration Threading completed, elapsed time: {time()-starting_time}")
