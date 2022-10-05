@@ -6,9 +6,10 @@ from datetime import date
 # guide to use python3 scripts in linux
 # step 1: navigate to a memorable folder where you will store the script (good examples would be home directory or /usr/local/bin)
 # step 2: create a new text file by using command touch filename.py e.g touch script.py
-# step 3: change the permisions on the file so that it is able to be executed with command sudo chmod +x script.py
+# step 3: give execute permissions to the file with command sudo chmod +x script.py
 # step 4: copy and paste the below script into the file by using nano or vi/vim depending on what text editor you have installed on your server (right click inside the window to paste)
-# step 5: ensure the HOST and tn.write(b"cisco\n") lines 15 and 32 match your switch/lab
+# step 4.5: if using minimal version (no gui) you may need to write the code line by line into the script file, ensuring it is identical except for the IP address and password you have set
+# step 5: ensure the HOST and tn.write(b"cisco\n") lines 16 and 32 match your switch/lab
 # step 6: run script by using command python3 script.py
 
 today = date.today()
@@ -36,7 +37,7 @@ tn.write(b"exit\n")
 
 readOutput = tn.read_all()  # reads everything the script has output
 # saves to file consisting of (IP) Running Config (Todays Date)
-saveOutput = open(f"{HOST} Running Config {today}", "w")
+saveOutput = open(f"{HOST} :config backup: {today}", "w")
 saveOutput.write(readOutput.decode("ascii"))
 saveOutput.write("\n")
 saveOutput.close
