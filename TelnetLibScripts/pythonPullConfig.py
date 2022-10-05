@@ -1,8 +1,15 @@
 from asyncore import read
 import telnetlib
-import getpass
 from datetime import date
 # telnetlib documentation https://docs.python.org/3/library/telnetlib.html
+
+# guide to use python3 scripts in linux
+# step 1: navigate to a memorable folder where you will store the script (good examples would be home directory or /usr/local/bin)
+# step 2: create a new text file by using command touch filename.py e.g touch script.py
+# step 3: change the permisions on the file so that it is able to be executed with command sudo chmod +x script.py
+# step 4: copy and paste the below script into the file by using nano or vi/vim depending on what text editor you have installed on your server (right click inside the window to paste)
+# step 5: ensure the HOST and tn.write(b"cisco\n") lines 15 and 32 match your switch/lab
+# step 6: run script by using command python3 script.py
 
 today = date.today()
 HOST = "192.168.122.122"  # Device IP address goes here
